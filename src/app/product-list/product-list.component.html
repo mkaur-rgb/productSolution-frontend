@@ -1,0 +1,30 @@
+<h2>Product List (CRUD)</h2>
+
+<!-- Product Form -->
+<div>
+  <input type="text" placeholder="Product name" [(ngModel)]="newProduct.name" />
+  <input type="number" placeholder="Price" [(ngModel)]="newProduct.price" />
+  <button (click)="addProduct()">Add Product</button>
+</div>
+
+<hr />
+
+<!-- Product List -->
+<ul>
+  <li *ngFor="let product of products">
+    <!-- Edit -->
+    <div *ngIf="editProductId === product.id">
+      <input type="text" [(ngModel)]="editedProduct.name" />
+      <input type="number" [(ngModel)]="editedProduct.price" />
+      <button (click)="saveEdit()">Save</button>
+      <button (click)="cancelEdit()">Cancel</button>
+    </div>
+
+    <!-- View-->
+    <div *ngIf="editProductId !== product.id">
+      {{ product.name }} - ${{ product.price }}
+      <button (click)="startEdit(product)">Edit</button>
+      <button (click)="deleteProduct(product.id)">Delete</button>
+    </div>
+  </li>
+</ul>
