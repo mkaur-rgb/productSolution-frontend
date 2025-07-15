@@ -43,17 +43,12 @@ export class ProductListComponent implements OnInit {
       return;
     }
     this.productService.addProduct(this.newProduct).subscribe({
-      next: (createdProduct) => {
-        this.products.push(createdProduct);
+      next: () => {
+        this.loadProducts();
         this.newProduct = { id: 0, name: '', price: 0 };
       },
       error: (err) => console.error('Error adding product', err),
     });
-  }
-
-  startEdit(product: ApiProduct) {
-    this.editProductId = product.id;
-    this.editedProduct = { ...product };
   }
 
   saveEdit() {
@@ -63,27 +58,30 @@ export class ProductListComponent implements OnInit {
     }
     this.productService.updateProduct(this.editedProduct).subscribe({
       next: () => {
-        this.products = this.products.map((p) =>
-          p.id === this.editedProduct.id ? { ...this.editedProduct } : p
-        );
+        this.loadProducts();
         this.cancelEdit();
       },
       error: (err) => console.error('Error updating product', err),
     });
   }
 
-  cancelEdit() {
-    this.editProductId = null;
-    this.editedProduct = { id: 0, name: '', price: 0 };
-  }
-
   deleteProduct(id: number) {
     this.productService.deleteProduct(id).subscribe({
       next: () => {
-        this.products = this.products.filter((p) => p.id !== id);
+        this.loadProducts();
       },
       error: (err) => console.error('Error deleting product', err),
     });
+  }
+
+  startEdit(product: ApiProduct) {
+    this.editProductId = product.id;
+    this.editedProduct = { ...product };
+  }
+
+  cancelEdit() {
+    this.editProductId = null;
+    this.editedProduct = { id: 0, name: '', price: 0 };
   }
 
   // ======================
